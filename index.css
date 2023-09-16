@@ -23,16 +23,27 @@ body {
   width: 100%;
   background-color: aliceblue;
   border-radius: 10px;
-  height: 32px;
+  height: 64px;
   margin-bottom: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .pantalla {
-  margin-left: 10px;
   color: black;
   font-weight: 800;
+}
+
+#actuales {
+  margin-left: 10px;
+  align-self: flex-start;
+}
+
+#anteriores {
+  margin-right: 10px;
+  align-self: flex-end;
+  color: grey;
 }
 
 .fila {
