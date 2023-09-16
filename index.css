@@ -9,12 +9,13 @@ html {
 }
 
 .calculadora {
-  width: 100%;
+  width: 300px;
   height: 250px;
 }
 
-body {
+main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -46,6 +47,11 @@ body {
   display: none;
 }
 
+.disable {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .digito-anterior {
   margin-right: 10px;
   align-self: flex-end;
@@ -56,6 +62,11 @@ body {
 .fila {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(62px, 1fr));
+}
+
+.fila-ultima {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
 
 .boton {

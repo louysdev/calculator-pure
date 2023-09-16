@@ -11,7 +11,6 @@ let operaciones = "";
 let resultado = "";
 let cantidadRepiticiones = 0;
 let terminado = false;
-let cambioSigno = false;
 
 const agregarNumero = (number) => {
   const dataAnterior = pantallaActual.innerHTML;
@@ -28,7 +27,12 @@ const detectarSigno = (cadena) => {
   const cadenaSeparada = cadena.split("");
 
   for (let i = 0; i < cadenaSeparada.length; i++) {
-    if (cadenaSeparada[i] === "+") {
+    if (
+      cadenaSeparada[i] === "+" ||
+      cadenaSeparada[i] === "-" ||
+      cadenaSeparada[i] === "*" ||
+      cadenaSeparada[i] === "/"
+    ) {
       cantidadRepiticiones++;
     }
   }
@@ -37,6 +41,26 @@ const detectarSigno = (cadena) => {
   cantidadRepiticiones = cantidadRepiticiones > 1 && 0;
 
   return pasable;
+};
+
+const desactivarOperaciones = (operacion) => {
+  for (let i = 0; i < 18; i++) {
+    if (
+      (botones[i].innerHTML === "+" ||
+        botones[i].innerHTML === "-" ||
+        botones[i].innerHTML === "*" ||
+        botones[i].innerHTML === "/") &&
+      botones[i].innerHTML !== operacion
+    ) {
+      botones[i].classList.add("disable");
+    }
+  }
+};
+
+const activarOperaciones = () => {
+  for (let i = 0; i < 18; i++) {
+    botones[i].classList.remove("disable");
+  }
 };
 
 const borrar = () => {
@@ -49,20 +73,20 @@ const borrar = () => {
   pantallaActual.innerHTML = oldOperaciones.slice(0, oldOperaciones.length - 1);
 };
 
-const borrarSigno = () => {
-  const dataAnterior = pantallaActual.innerHTML;
-  const signo = dataAnterior.charAt(dataAnterior.length - 1);
+// const borrarSigno = () => {
+//   const dataAnterior = pantallaActual.innerHTML;
+//   const signo = dataAnterior.charAt(dataAnterior.length - 1);
 
-  for (let i = 0; i <= dataAnterior.length; i++) {
-    if (signo === "+" || signo === "-" || signo === "X" || signo === "÷") {
-      const oldOperaciones = dataAnterior;
-      pantallaActual.innerHTML = oldOperaciones.slice(
-        0,
-        oldOperaciones.length - 1
-      );
-    }
-  }
-};
+//   for (let i = 0; i <= dataAnterior.length; i++) {
+//     if (signo === "+" || signo === "-" || signo === "X" || signo === "÷") {
+//       const oldOperaciones = dataAnterior;
+//       pantallaActual.innerHTML = oldOperaciones.slice(
+//         0,
+//         oldOperaciones.length - 1
+//       );
+//     }
+//   }
+// };
 
 const limpiar = () => {
   pantallaActual.innerHTML = "0";
@@ -78,28 +102,26 @@ const limpiarCompleto = () => {
 };
 
 const efectuarOperacion = (operacion) => {
+  desactivarOperaciones(operacion);
   const dataAnterior = pantallaActual.innerHTML;
 
   // Detectar si es necesario mostrar los label
   if (dataAnterior.endsWith(`${operacion}`)) {
     return;
-  } else if (dataAnterior.endsWith(`${operacion}`) !== operacion) {
-    console.log("entro");
-    borrarSigno();
-    pantallaActual.innerText = `${pantallaActual.innerText}${operacion}`;
-  } else if (!dataAnterior.endsWith("+") || !dataAnterior.endsWith("-")) {
-    // Que pendejo coñoooooo
-    // pantallaOperacionesAnteriores.classList.add("oculto");
-
-    cambioSigno = true;
-    operaciones =
-      operaciones === "" ? `${operaciones}${dataAnterior}` : dataAnterior;
-
-    resultado = eval(operaciones);
-
-    pantallaAnterior.innerText = resultado;
-    pantallaActual.innerText = `${pantallaActual.innerText}${operacion}`;
   }
+  // else if (!dataAnterior.endsWith("+") || !dataAnterior.endsWith("-")) {
+  //   // Que pendejo coñoooooo
+  //   // pantallaOperacionesAnteriores.classList.add("oculto");
+
+  //   cambioSigno = true;
+  //   operaciones =
+  //     operaciones === "" ? `${operaciones}${dataAnterior}` : dataAnterior;
+
+  //   resultado = eval(operaciones);
+
+  //   pantallaAnterior.innerText = resultado;
+  //   pantallaActual.innerText = `${pantallaActual.innerText}${operacion}`;
+  // }
 
   if (dataAnterior.charAt(0) === "0" || dataAnterior.length === 0) {
     pantallaAnterior.classList.add("oculto");
@@ -120,16 +142,13 @@ const efectuarOperacion = (operacion) => {
     pantallaAnterior.classList.remove("oculto");
   }
 
-  if (cambioSigno === false) {
-    cambioSigno === false;
-    operaciones =
-      operaciones === "" ? `${operaciones}${dataAnterior}` : dataAnterior;
+  operaciones =
+    operaciones === "" ? `${operaciones}${dataAnterior}` : dataAnterior;
 
-    resultado = eval(operaciones);
+  resultado = eval(operaciones);
 
-    pantallaAnterior.innerText = resultado;
-    pantallaActual.innerText = `${pantallaActual.innerText}${operacion}`;
-  }
+  pantallaAnterior.innerText = resultado;
+  pantallaActual.innerText = `${pantallaActual.innerText}${operacion}`;
 };
 
 const igual = () => {
@@ -137,7 +156,12 @@ const igual = () => {
     pantallaAnterior.classList.add("oculto");
     pantallaOperacionesAnteriores.classList.add("oculto");
     return;
-  } else if (pantallaActual.innerText.endsWith("+") === true) {
+  } else if (
+    pantallaActual.innerText.endsWith("+") === true ||
+    pantallaActual.innerText.endsWith("-") === true ||
+    pantallaActual.innerText.endsWith("*") === true ||
+    pantallaActual.innerText.endsWith("/") === true
+  ) {
     pantallaOperacionesAnteriores.classList.add("oculto");
     resultado = eval(resultado);
     pantallaAnterior.innerText = pantallaActual.innerText;
@@ -150,12 +174,19 @@ const igual = () => {
     pantallaAnterior.innerText = operaciones;
     terminado = true;
   } else {
+    resultado = "";
+    operaciones = "";
+
+    pantallaAnterior.innerHTML = "";
+    pantallaOperacionesAnteriores.innerHTML = "";
+
     pantallaAnterior.classList.add("oculto");
   }
+  activarOperaciones();
 };
 
 const agregarMetodos = () => {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 18; i++) {
     if (Number(botones[i].innerHTML) <= 9) {
       botones[i].addEventListener("click", function () {
         agregarNumero(Number(botones[i].innerHTML));
@@ -164,8 +195,8 @@ const agregarMetodos = () => {
     if (
       botones[i].innerHTML.toString() === "+" ||
       botones[i].innerHTML.toString() === "-" ||
-      botones[i].innerHTML.toString() === "X" ||
-      botones[i].innerHTML.toString() === "÷"
+      botones[i].innerHTML.toString() === "*" ||
+      botones[i].innerHTML.toString() === "/"
     ) {
       botones[i].addEventListener("click", function () {
         efectuarOperacion(botones[i].innerHTML.toString());
