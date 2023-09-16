@@ -23,7 +23,7 @@ body {
   width: 100%;
   background-color: aliceblue;
   border-radius: 10px;
-  height: 64px;
+  height: 84px;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -35,15 +35,22 @@ body {
   font-weight: 800;
 }
 
-#actuales {
+.digito-actual {
+  color: black;
+  font-weight: 800;
   margin-left: 10px;
   align-self: flex-start;
 }
 
-#anteriores {
+.oculto {
+  display: none;
+}
+
+.digito-anterior {
   margin-right: 10px;
   align-self: flex-end;
   color: grey;
+  font-weight: 800;
 }
 
 .fila {
